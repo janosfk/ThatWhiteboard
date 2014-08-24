@@ -1,0 +1,46 @@
+﻿    #container {
+        position: relative;
+        overflow: auto;
+        -ms-scrollbar-base-color: #ffeaff;
+        scrollbar-base-color: #ffeaff;
+    }
+
+    #whiteBoard {
+        border: 1px dashed #CCCCCC;
+        margin: 5px;
+        border-style: dotted;
+        border-width: 1px;
+        background-color: #FFFFFF;
+        vertical-align: top;
+    }
+
+    #imageTemp {
+        position: absolute;
+        top: 1px;   
+        left: 1px;
+        margin: 5px;
+    }
+
+    #imageTempt {
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        margin: 5px;
+    }
+
+    .ui-widget-overlay {
+        opacity: .70;
+        filter: Alpha(Opacity=70);
+    }
+
+    /*temp*/
+    #secondaryWhiteBoard {
+        border: 1px dashed #ff0000;
+        margin: 5px;
+        border-style: dotted;
+        border-width: 1px;
+        background-color: #FFFFFF;
+        vertical-align: bottom;
+        width: 700px;
+        height: 400px;
+    }

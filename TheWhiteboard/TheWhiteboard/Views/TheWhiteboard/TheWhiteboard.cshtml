@@ -1,0 +1,78 @@
+﻿@model TheWhiteboard.Models.UserVM
+@{
+    ViewBag.Title = "Student Whiteboard";
+
+}
+
+<link href="~/Content/TheWhiteboard.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/angular-route.js"></script>
+@Scripts.Render("~/bundles/signalr")
+<script src="~/signalr/hubs">
+
+</script>
+<script src="~/Scripts/kinetic-v5.1.0.min.js"></script>
+@section scripts
+{
+    <script src="~/app/TheWhiteboard/theWhiteboard-module.js"></script>
+    <script src="~/app/TheWhiteboard/theWhiteboard-data-repo.js"></script>
+    <script src="~/app/TheWhiteboard/theWhiteboard-controller.js"></script>
+
+    <script src="~/app/TheWhiteboard/theWhiteboardMain.js"></script>
+
+    <script src="~/app/TheWhiteboard/draggable.js"></script>
+
+    <script type="text/javascript">
+        angular.module('theWhiteboardModule').factory('bootstrappedData', function() {
+            return {
+                vm: @Html.Raw(Model.ViewModelJSON())
+                };
+        });
+    </script>
+
+}
+
+
+<div data-ng-app="theWhiteboardModule" data-ng-controller="theWhiteboardController"  class="row">
+
+    <div data-ng-controller="theWhiteboardController" class="row">
+        <span class="col-md-12">
+            <h4>@Model.Manager -  {{ WIDTH }} {{ drawObject }} </h4>
+        </span>
+
+        @*Refactor from table*@
+        <div class="col-md-12">
+            @*Div for canvas/icons*@
+            <div class="col-md-9">
+                <span class="col-md-12">
+                    <img id="imgline" style="border-color: Gray; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/line_dim.png" onclick="SelectTool('line'); return false;" />
+                    <img id="imgpencil" style="border-color: Gray; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/pencil_dim.png" onclick="SelectTool('pencil'); return false;" />
+                    <img id="imgrect" style="border-color: Gray; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/rect_dim.png" onclick="SelectTool('rectangle'); return false;" />
+                    <img id="imgtext" style="border-color: Gray; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/text_dim.png" onclick="SelectTool('text'); return false;" />
+                    <img id="imgerase" style="border-color: Gray; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/erase_dim.png" onclick="SelectTool('erase'); return false;" />
+                    <img id="imgSave" style="border: 0; border-style: dashed; width: 32px; height: 32px"
+                         src="/images/save.png" data-ng-show="{{ bootstrappedData.manager == 1 }}" onclick="SaveDrawings(); return false;" />
+                </span>
+                <div id="container" class="col-md-12">
+                    <canvas id="whiteBoard" class="col-md-12"></canvas>
+                    <div id="status">
+                    </div>
+                </div>
+            </div>
+            @*Unordered list with joined students*@
+            <div class="col-md-3">
+                <ul class="col-md-12 list-group" >
+                    <li class="list-group-item list-group-item-info">Users</li>
+                    <li data-ng-repeat="user in $parent.users" class="list-group-item">{{user}}</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
