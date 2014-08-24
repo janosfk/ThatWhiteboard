@@ -1,7 +1,4 @@
-﻿'use strict';
-
-var theWhiteboardModule = angular.module('theWhiteboardModule', ['ngRoute']);
-
-(function() {
-    theWhiteboardModule.value('$', $);
+﻿(function() {
+    'use strict';
+    angular.module('theWhiteboardModule').value('$', $);
 })();

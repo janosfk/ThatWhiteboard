@@ -41,7 +41,5 @@
         return factory;
     };
 
-    //heWhiteboardDataRepo.$inject = ['$http'];  //TODO: is $http really needed?
-
 
 })();
