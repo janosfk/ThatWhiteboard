@@ -1,4 +1,4 @@
 ﻿(function() {
     'use strict';
-    angular.module('theWhiteboardModule').value('$', $);
+    angular.module('theWhiteboardModule', [] ).value('$', $);
 })();
