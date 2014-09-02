@@ -13,9 +13,6 @@ var DrawTool = {
 
 var whiteboardHub;
 
-//var canvas, context;
-//var mainCanvas, mainContext;
-
 var layer = null;
 var stage = null;
 
@@ -54,9 +51,6 @@ $(document).ready(function () {
         SelectTool('line');
 
         //events region
-        //layer.on('mousedown', canvasEvents, false);
-        ////layer.on('mousemove', canvasEvents, false);
-        //layer.on('mouseup', canvasEvents, false);
         layer.on('mousedown', function () {
             canvasEvents({ type: 'mousedown' });
         });
@@ -119,24 +113,7 @@ function SaveDrawings() {
 function canvasEvents(ev) {     //TODO: review, more generic
 
     console.log('Event in canvas');
-    //var iebody = (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement : document.body;
-
-    //var dsoctop = document.all ? iebody.scrollTop : pageYOffset;
-    //var appname = window.navigator.appName;
     try {
-        //if (ev.layerX || ev.layerX == 0) {  // Firefox
-        //    ev._x = ev.layerX;
-        //    if ('Netscape' == appname)
-        //        ev._y = ev.layerY;
-        //    else
-        //        ev._y = ev.layerY - dsoctop;
-
-        //} else if (ev.offsetX || ev.offsetX == 0) { // Opera
-        //    ev._x = ev.offsetX;
-        //    ev._y = ev.offsetY - dsoctop;
-        //}
-
-        //call tool event handler
         var func = currentTool[ev.type];
 
         if (func) {
@@ -175,8 +152,9 @@ tools.line = function () {
     this.mouseup = function (ev) {
         if (tool.started) {
             drawObject.currentState = DrawState.Completed;
-            drawObject.CurrentX = ev._x;
-            drawObject.CurrentY = ev._y;
+            var mousePos = stage.getPointerPosition();
+            drawObject.CurrentX = mousePos.x;
+            drawObject.CurrentY = mousePos.y;
             DrawIt(drawObject, true);
             tool.started = false;
         }
@@ -192,8 +170,11 @@ tools.pencil = function () {
         drawObject.Tool = DrawTool.Pencil;
         tool.started = true;
         drawObject.currentState = DrawState.Started;
-        drawObject.StartX = ev._x;
-        drawObject.StartY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.StartX = mousePos.x;
+        drawObject.StartY = mousePos.y;
+        drawObject.CurrentX = mousePos.x;
+        drawObject.CurrentY = mousePos.y;
         DrawIt(drawObject, true);
         drawObjectsCollection.push(drawObject);
     };
@@ -202,8 +183,9 @@ tools.pencil = function () {
             var drawObject = new DrawObject();
             drawObject.Tool = DrawTool.Pencil;
             drawObject.currentState = DrawState.Inprogress;
-            drawObject.CurrentX = ev._x;
-            drawObject.CurrentY = ev._y;
+            var mousePos = stage.getPointerPosition();
+            drawObject.CurrentX = mousePos.x;
+            drawObject.CurrentY = mousePos.y;
             DrawIt(drawObject, true);
             drawObjectsCollection.push(drawObject);
         }
@@ -214,8 +196,9 @@ tools.pencil = function () {
             drawObject.Tool = DrawTool.Pencil;
             tool.started = false;
             drawObject.currentState = DrawState.Completed;
-            drawObject.CurrentX = ev._x;
-            drawObject.CurrentY = ev._y;
+            var mousePos = stage.getPointerPosition();
+            drawObject.CurrentX = mousePos.x;
+            drawObject.CurrentY = mousePos.y;
             DrawIt(drawObject, true);
             drawObjectsCollection.push(drawObject);
             var message = JSON.stringify(drawObjectsCollection);
@@ -238,24 +221,30 @@ tools.rectangle = function () {
 
     this.mousedown = function (ev) {
         drawObject.currentState = DrawState.Started;
-        drawObject.StartX = ev._x;
-        drawObject.StartY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.StartX = mousePos.x;
+        drawObject.StartY = mousePos.y;
+        drawObject.CurrentX = 0;
+        drawObject.CurrentY = 0;
         tool.started = true;
+        DrawIt(drawObject, true);
     };
     this.mousemove = function (ev) {
         if (!tool.started) {
             return;
         }
         drawObject.currentState = DrawState.Inprogress;
-        drawObject.CurrentX = ev._x;
-        drawObject.CurrentY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.CurrentX = mousePos.x;
+        drawObject.CurrentY = mousePos.y;
         DrawIt(drawObject, true);
     };
     this.mouseup = function (ev) {
         if (tool.started) {
             drawObject.currentState = DrawState.Completed;
-            drawObject.CurrentX = ev._x;
-            drawObject.CurrentY = ev._y;
+            var mousePos = stage.getPointerPosition();
+            drawObject.CurrentX = mousePos.x;
+            drawObject.CurrentY = mousePos.y;
             DrawIt(drawObject, true);
             tool.started = false;
 
@@ -273,11 +262,13 @@ tools.text = function () {
         if (!tool.started) {
             tool.started = true;
             drawObject.currentState = DrawState.Started;
-            drawObject.StartX = ev._x;
-            drawObject.StartY = ev._y;
+            var mousePos = stage.getPointerPosition();
+            drawObject.StartX = mousePos.x;
+            drawObject.StartY = mousePos.y;
+            drawObject.CurrentX = 0;
+            drawObject.CurrentY = 0;
 
             var textToAdd = prompt('Enter the text:', ' ', 'Add Text');
-            drawObject.Text = "";
             drawObject.Text = textToAdd;
 
             if (textToAdd.length < 1) {
@@ -299,7 +290,7 @@ tools.text = function () {
         if (tool.started) {
             tool.mousemove(ev);
             tool.started = false;
-            updatecanvas();
+            updateCanvas();
         }
     };
 }
@@ -312,8 +303,11 @@ tools.erase = function () {
     this.mousedown = function (ev) {  //TODO: review with param -> (ev)
         tool.started = true;
         drawObject.currentState = DrawState.Started;
-        drawObject.StartX = ev._x;
-        drawObject.StartY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.StartX = mousePos.x;
+        drawObject.StartY = mousePos.y;
+        drawObject.CurrentX = mousePos.x;
+        drawObject.CurrentY = mousePos.y;
         DrawIt(drawObject, true);
     };
     this.mousemove = function (ev) {
@@ -321,14 +315,16 @@ tools.erase = function () {
             return;
         }
         drawObject.currentState = DrawState.Inprogress;
-        drawObject.CurrentX = ev._x;
-        drawObject.CurrentY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.CurrentX = mousePos.x;
+        drawObject.CurrentY = mousePos.y;
         DrawIt(drawObject, true);
     };
     this.mouseup = function (ev) {
         drawObject.currentState = DrawState.Completed;
-        drawObject.CurrentX = ev._x;
-        drawObject.CurrentY = ev._y;
+        var mousePos = stage.getPointerPosition();
+        drawObject.CurrentX = mousePos.x;
+        drawObject.CurrentY = mousePos.y;
         DrawIt(drawObject, true);
         tool.started = false;
     }
@@ -358,13 +354,6 @@ function DrawIt(drawObject, syncServer) {
                 break;
 
             case DrawState.Completed:
-                //context.clearRect(0, 0, canvas.width, canvas.height);
-                //context.beginPath();
-                //context.moveTo(drawObject.StartX, drawObject.StartY);
-                //context.lineTo(drawObject.CurrentX, drawObject.CurrentY);
-                //context.stroke();
-                //context.closePath();
-
                 if (drawObject.currentState == DrawState.Completed) {
                     updateCanvas();
                 }
@@ -374,13 +363,22 @@ function DrawIt(drawObject, syncServer) {
     else if (drawObject.Tool == DrawTool.Pencil) {
         switch (drawObject.currentState) {
             case DrawState.Started:
-                context.beginPath();
-                context.moveTo(drawObject.StartX, drawObject.StartY);
+                currentLine = new Kinetic.Line({
+                    points: [drawObject.StartX, drawObject.StartY, drawObject.CurrentX, drawObject.CurrentY],
+                    stroke: 'green'
+                });
+                layer.add(currentLine);
+                currentLine.points([drawObject.StartX, drawObject.StartY, drawObject.CurrentX, drawObject.CurrentY]);
+                layer.drawScene();
+
                 break;
             case DrawState.Inprogress:
+                prevPoints = currentLine.points();
+                currentLine.points(prevPoints.concat([drawObject.CurrentX, drawObject.CurrentY]));
+                layer.drawScene();
+                break;
+
             case DrawState.Completed:
-                context.lineTo(drawObject.CurrentX, drawObject.CurrentY);
-                context.stroke();
                 if (drawObject.currentState == DrawState.Completed) {
                     updateCanvas();
                 }
@@ -390,16 +388,19 @@ function DrawIt(drawObject, syncServer) {
     else if (drawObject.Tool == DrawTool.Text) {
         switch (drawObject.currentState) {
             case DrawState.Started:
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                clearContext(context);
-                context.save();
-                context.font = 'normal 16px Calibri';
-                context.fillStyle = "blue";
-                context.textAlign = "left";
-                context.textBaseline = "bottom";
-                context.fillText(drawObject.Text, drawObject.StartX, drawObject.StartY);
-                context.restore();
-                updateCanvas();
+                currentText = new Kinetic.Text({
+                    x: drawObject.StartX,
+                    y: drawObject.StartY,
+                    text: drawObject.Text,
+                    fontFamily: 'Calibri',
+                    fontSize: 18,
+                    fontStyle: 'normal',
+                    stroke: 'black'
+                });
+                layer.add(currentText);
+
+                layer.drawScene();
+
                 break;
 
         }
@@ -410,17 +411,23 @@ function DrawIt(drawObject, syncServer) {
         switch (drawObject.currentState) {
 
             case DrawState.Started:
-                context.fillStyle = "#FFFFFF";
-                context.fillRect(drawObject.StartX, drawObject.StartY, 20, 20);
-                context.restore();
-                updateCanvas();
+                eraseLine = new Kinetic.Line({
+                    points: [drawObject.StartX, drawObject.StartY, drawObject.CurrentX, drawObject.CurrentY],
+                    stroke: "#FFFFFF",
+                    strokeWidth: 20
+                });
+                layer.add(eraseLine);
+                layer.drawScene();
+
+
                 break;
             case DrawState.Inprogress:
+                prevPoints = eraseLine.points();
+                eraseLine.points(prevPoints.concat([drawObject.CurrentX, drawObject.CurrentY]));
+                layer.drawScene();
+                break;
+
             case DrawState.Completed:
-                context.fillStyle = "#FFFFFF";
-                context.fillRect(drawObject.CurrentX, drawObject.CurrentY, 20, 20);
-                context.restore();
-                updateCanvas();
                 break;
         }
 
@@ -428,20 +435,25 @@ function DrawIt(drawObject, syncServer) {
     }
     else if (drawObject.Tool == DrawTool.Rectangle) {
         switch (drawObject.currentState) {
+            case DrawState.Started:
+                currentRect = new Kinetic.Rect({
+                    x: drawObject.StartX,
+                    y: drawObject.StartY,
+                    width: 0,
+                    height: 0,
+                    stroke: 'blue'
+                });
+                layer.add(currentRect);
+                layer.drawScene();
+                break;
+
             case DrawState.Inprogress:
+                currentRect.setWidth(drawObject.CurrentX - currentRect.x());
+                currentRect.setHeight(drawObject.CurrentY - currentRect.y());
+                layer.drawScene();
+                break;
+
             case DrawState.Completed:
-                var x = Math.min(drawObject.CurrentX, drawObject.StartX),
-                        y = Math.min(drawObject.CurrentY, drawObject.StartY),
-                        w = Math.abs(drawObject.CurrentX - drawObject.StartX),
-                        h = Math.abs(drawObject.CurrentY - drawObject.StartY);
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
-
-                if (!w || !h) {
-                    return;
-                }
-
-                context.strokeRect(x, y, w, h);
                 if (drawObject.currentState == DrawState.Completed) {
                     updateCanvas();
                 }
@@ -460,9 +472,6 @@ function DrawIt(drawObject, syncServer) {
 }
 
 function updateCanvas() {
-    //mainContext.drawImage(canvas, 0, 0);
-    //context.clearRect(0, 0, canvas.width, canvas.height);
 }
 function clearContext(c) {
-    c.clearRect(0, 0, 0, 0); //TODO: review WIDTH, HEIGHT);
 }
