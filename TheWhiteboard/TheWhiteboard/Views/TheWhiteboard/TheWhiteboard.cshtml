@@ -4,7 +4,16 @@
 
 }
 
+
 <link href="~/Content/TheWhiteboard.css" rel="stylesheet" />
+<style>
+    #container {
+        border: 1px solid black;
+        width: 780px;
+        height: 550px;
+    }
+</style>
+
 @Scripts.Render("~/bundles/jquery")
 <script src="~/Scripts/angular.js"></script>
 <script src="~/Scripts/angular-route.js"></script>
@@ -19,9 +28,8 @@
     <script src="~/app/TheWhiteboard/theWhiteboard-data-repo.js"></script>
     <script src="~/app/TheWhiteboard/theWhiteboard-controller.js"></script>
 
-    <script src="~/app/TheWhiteboard/theWhiteboardMain.js"></script>
-
-    <script src="~/app/TheWhiteboard/draggable.js"></script>
+    @*<script src="~/app/TheWhiteboard/theWhiteboardMain.js"></script>*@
+    <script src="~/app/TheWhiteboard/kinectjspainter.js"></script>
 
     <script type="text/javascript">
         angular.module('theWhiteboardModule').factory('bootstrappedData', function() {
@@ -60,9 +68,6 @@
                          src="/images/save.png" data-ng-show="{{ bootstrappedData.manager == 1 }}" onclick="SaveDrawings(); return false;" />
                 </span>
                 <div id="container" class="col-md-12">
-                    <canvas id="whiteBoard" class="col-md-12"></canvas>
-                    <div id="status">
-                    </div>
                 </div>
             </div>
             @*Unordered list with joined students*@
