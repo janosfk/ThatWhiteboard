@@ -144,11 +144,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\TheWhiteboard\draggable.js" />
-    <Content Include="app\TheWhiteboard\line-directive.js" />
     <Content Include="app\TheWhiteboard\theWhiteboard-controller.js" />
     <Content Include="app\TheWhiteboard\theWhiteboard-data-repo.js" />
-    <Content Include="app\TheWhiteboard\theWhiteboard-directives.js" />
     <Content Include="app\TheWhiteboard\theWhiteboard-module.js" />
     <Content Include="app\TheWhiteboard\theWhiteboardMain.js" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -166,39 +163,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\aspNetHome.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\erase.png" />
-    <Content Include="Images\erase_dim.png" />
-    <Content Include="Images\facebook.png" />
-    <Content Include="Images\findHosting.png" />
-    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\circle.png" />
+    <Content Include="Images\eraser.png" />
     <Content Include="Images\line.png" />
-    <Content Include="Images\line_dim.png" />
-    <Content Include="Images\NuGetGallery.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
-    <Content Include="Images\oval.png" />
-    <Content Include="Images\oval_dim.png" />
-    <Content Include="Images\pencil.png" />
-    <Content Include="Images\pencil_dim.png" />
-    <Content Include="Images\rect.png" />
-    <Content Include="Images\rect_dim.png" />
+    <Content Include="Images\pen.png" />
     <Content Include="Images\save.png" />
+    <Content Include="Images\square.png" />
     <Content Include="Images\text.png" />
-    <Content Include="Images\text_dim.png" />
-    <Content Include="Images\twitter.png" />
-    <Content Include="Images\whiteboardlogo.png" />
-    <Content Include="Images\windowsLive.png" />
     <Content Include="Scripts\angular-route.js" />
     <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\angular.js" />
@@ -219,7 +190,6 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="test.html" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
