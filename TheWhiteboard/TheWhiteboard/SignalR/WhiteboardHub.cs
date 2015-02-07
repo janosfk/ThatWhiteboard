@@ -14,6 +14,7 @@ namespace TheWhiteboard.SignalR
     {
 
         private readonly static ConcurrentDictionary<string, int> _users;
+        private static int _u = 0; 
 
         static WhiteboardHub()
         {
@@ -22,7 +23,7 @@ namespace TheWhiteboard.SignalR
 
         public override Task OnConnected()
         {
-            string name = this.Context.User.Identity.Name;
+            string name = this.Context.User.Identity.Name + _u++;
             _users.AddOrUpdate(name, 0, (k, v) => v);
             Clients.All.SendUserList(_users.Keys);
             return base.OnConnected();

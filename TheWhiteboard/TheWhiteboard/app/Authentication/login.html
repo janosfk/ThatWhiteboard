@@ -1,0 +1,36 @@
+﻿<form name="loginForm" class="loginform" ng-controller="authCtrl" ng-submit="login(credentials)" novalidate="">
+    <div class="login-form">
+        <div class="username-container">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Username" ng-model="loginData.username" />
+        </div>
+        <div class="password-container">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Password" ng-model="loginData.password" />
+        </div>
+        <div ng-hide="!newUserRegistration" class="password-container">
+            <label for="repassword">Confirm:</label>
+            <input type="password" id="repassword" placeholder="Confirm" ng-model="repassword" />
+        </div>
+        <div ng-hide="newUserRegistration" class="login-btn-container">
+            <button class="login-btn" type="submit" ng-disabled="loginPressed">Login</button>
+        </div>
+        <div ng-hide="!newUserRegistration" class="register-btn-container">
+            <button class="login-btn" type="submit" ng-disabled="registerPressed" ng-click="register()" >Register</button>
+        </div>
+        <div ng-hide="newUserRegistration" class="newuser-container">
+            <button class="newUser-btn" ng-click="newUser()">New User</button>
+        </div>
+    </div>
+    
+    <!--<div ng-show="newUserRegistration" class="register-form">
+        <div class="username-container">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Username" ng-model="loginData.username" />
+        </div>
+        <div class="password-container">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Password" ng-model="loginData.password" />
+        </div>
+    </div>-->
+</form>

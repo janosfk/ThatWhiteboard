@@ -14,15 +14,17 @@ namespace TheWhiteboard.Controllers
     {
         // GET: TheWhiteboard
         //[RequireHttps]
-        [Authorize]
+        //[Authorize]
         public ActionResult TheWhiteboard()
         {
-            var currentUser = new UserVM
-            {
-                UserName = User.Identity.Name,
-                Manager = (User.Identity.Name.ToLower() == "janos") ? 0 : 1
-            };
-            return View(currentUser);
+            //**
+            //var currentUser = new UserVM
+            //{
+            //    UserName = User.Identity.Name,
+            //    Manager = (User.Identity.Name.ToLower() == "elod") ? 1 : 0
+            //};
+            //return View(currentUser);
+            return View();
         }
     }
 }

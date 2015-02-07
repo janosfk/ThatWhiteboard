@@ -20,18 +20,28 @@ var tools = {};
 var currentTool;
 var drawObjectsCollection = [];
 
-$(document).ready(function() {
+//function runThisAfterFullLoad() {
+//    var a = "loaded";
+//}
+
+//$(document).ready(function() {
+function loadPainter() { 
     JoinHub();
 
     try {
-        mainCanvas = document.getElementById('whiteBoard');
-        if (!mainCanvas) {
-            alert('Error: Canvas element was not found!');
-            return;
-        }
+       
+        var cont = document.getElementById('container');
 
-        mainCanvas.width = 700;
-        mainCanvas.height = 400;
+        var mainCanvas = document.createElement('canvas');
+        mainCanvas.id = 'whiteBoard';
+        mainCanvas.style.border = '1px solid';
+        mainCanvas.style.borderColor = '#FF0000';
+
+        mainCanvas.width = cont.offsetWidth;
+        mainCanvas.height = cont.offsetHeight;
+        mainCanvas.style.zIndex = '0';
+
+        cont.appendChild(mainCanvas);
 
         //get 2D context from canvas
         mainContext = mainCanvas.getContext('2d');
@@ -52,8 +62,12 @@ $(document).ready(function() {
         canvas.id = 'imageTemp';
         canvas.width = mainCanvas.width;
         canvas.height = mainCanvas.height;
+        canvas.style.border = '1px solid';
+        canvas.style.borderColor = '#0000FF';
+        canvas.style.position = 'absolute';
+        canvas.style.zIndex = '1';
+        
         container.appendChild(canvas);
-
         context = canvas.getContext('2d');
 
         //select default tool
@@ -69,18 +83,20 @@ $(document).ready(function() {
     } catch (error) {
         alert(error.message);
     }
-});
+};
 
 function JoinHub() {
 
     theWhiteboardHub = $.connection.whiteBoard;
-    theWhiteboardHub.client.handleDraw = function (message) {
+    theWhiteboardHub.client.handleDraw = function(message) {
 
         var drawObjectCollection = jQuery.parseJSON(message)
         for (var i = 0; i < drawObjectCollection.length; i++) {
             DrawIt(drawObjectCollection[i], false);
         }
     }
+
+    console.log('hub joined');
 }
 
 function SelectTool(toolName) {
@@ -89,18 +105,19 @@ function SelectTool(toolName) {
     }
 
     if (toolName == "line" || toolName == "pencil" || toolName == "rectangle") {
-        mainCanvas.style.cursor = "crosshair";
+        //mainCanvas.style.cursor = "crosshair";
         canvas.style.cursor = "crosshair";
     }
-    else if (toolName == "erase") {
-        mainCanvas.style.cursor = "pointer";
+    if (toolName == "erase") {
+        //mainCanvas.style.cursor = "pointer";
         canvas.style.cursor = "pointer";
     }
-    else if (toolName == "text") {
-        mainCanvas.style.cursor = "text";
+    if (toolName == "text") {
+        //mainCanvas.style.cursor = "text";
         canvas.style.cursor = "text";
     }
 }
+
 function SaveDrawings() {
     var img = mainCanvas.toDataURL("image/png");
 
@@ -111,7 +128,7 @@ function SaveDrawings() {
     WindowObject.focus();
 }
 
-function canvasEvents(ev) {     //TODO: review, more generic
+function canvasEvents(ev) { //TODO: review, more generic
 
     console.log('Event in canvas');
     var iebody = (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement : document.body;
@@ -119,7 +136,7 @@ function canvasEvents(ev) {     //TODO: review, more generic
     var dsoctop = document.all ? iebody.scrollTop : pageYOffset;
     var appname = window.navigator.appName;
     try {
-        if (ev.layerX || ev.layerX == 0) {  // Firefox
+        if (ev.layerX || ev.layerX == 0) { // Firefox
             ev._x = ev.layerX;
             if ('Netscape' == appname)
                 ev._y = ev.layerY;
@@ -137,25 +154,24 @@ function canvasEvents(ev) {     //TODO: review, more generic
         if (func) {
             func(ev);
         }
-    }
-    catch (error) {
+    } catch (error) {
         alert(error.message);
     }
 }
 
-tools.line = function () {
+tools.line = function() {
     var tool = this;
     var drawObject = new DrawObject();
     drawObject.Tool = DrawTool.Line;
     this.started = false;
 
-    this.mousedown = function (ev) {
+    this.mousedown = function(ev) {
         drawObject.currentState = DrawState.Started;
         drawObject.StartX = ev._x;
         drawObject.StartY = ev._y;
         tool.started = true;
     };
-    this.mousemove = function (ev) {
+    this.mousemove = function(ev) {
         if (!tool.started) {
             return;
         }
@@ -164,7 +180,7 @@ tools.line = function () {
         drawObject.CurrentY = ev._y;
         DrawIt(drawObject, true);
     };
-    this.mouseup = function (ev) {
+    this.mouseup = function(ev) {
         if (tool.started) {
             drawObject.currentState = DrawState.Completed;
             drawObject.CurrentX = ev._x;
@@ -174,13 +190,13 @@ tools.line = function () {
         }
     };
 };
-tools.pencil = function () {
+tools.pencil = function() {
     var tool = this;
     this.started = false;
     drawObjectsCollection = [];
 
-    this.mousedown = function (ev) {
-        var drawObject = new DrawObject();      
+    this.mousedown = function(ev) {
+        var drawObject = new DrawObject();
         drawObject.Tool = DrawTool.Pencil;
         tool.started = true;
         drawObject.currentState = DrawState.Started;
@@ -189,7 +205,7 @@ tools.pencil = function () {
         DrawIt(drawObject, true);
         drawObjectsCollection.push(drawObject);
     };
-    this.mousemove = function (ev) {
+    this.mousemove = function(ev) {
         if (tool.started) {
             var drawObject = new DrawObject();
             drawObject.Tool = DrawTool.Pencil;
@@ -200,7 +216,7 @@ tools.pencil = function () {
             drawObjectsCollection.push(drawObject);
         }
     };
-    this.mouseup = function (ev) {
+    this.mouseup = function(ev) {
         if (tool.started) {
             var drawObject = new DrawObject();
             drawObject.Tool = DrawTool.Pencil;
@@ -214,7 +230,7 @@ tools.pencil = function () {
             theWhiteboardHub.server.sendDraw(message);
         }
     };
-    this.mouseout = function (ev) {
+    this.mouseout = function(ev) {
         if (tool.started) {
             var message = JSON.stringify(drawObjectsCollection);
             theWhiteboardHub.server.sendDraw(message);
@@ -222,19 +238,19 @@ tools.pencil = function () {
         tool.started = false;
     }
 };
-tools.rectangle = function () {
+tools.rectangle = function() {
     var tool = this;
     var drawObject = new DrawObject();
     drawObject.Tool = DrawTool.Rectangle;
     this.started = false;
 
-    this.mousedown = function (ev) {
+    this.mousedown = function(ev) {
         drawObject.currentState = DrawState.Started;
         drawObject.StartX = ev._x;
         drawObject.StartY = ev._y;
         tool.started = true;
     };
-    this.mousemove = function (ev) {
+    this.mousemove = function(ev) {
         if (!tool.started) {
             return;
         }
@@ -243,7 +259,7 @@ tools.rectangle = function () {
         drawObject.CurrentY = ev._y;
         DrawIt(drawObject, true);
     };
-    this.mouseup = function (ev) {
+    this.mouseup = function(ev) {
         if (tool.started) {
             drawObject.currentState = DrawState.Completed;
             drawObject.CurrentX = ev._x;
@@ -254,13 +270,13 @@ tools.rectangle = function () {
         }
     };
 };
-tools.text = function () {
+tools.text = function() {
     var tool = this;
     this.started = false;
     var drawObject = new DrawObject();
     drawObject.Tool = DrawTool.Text;
 
-    this.mousedown = function (ev) {
+    this.mousedown = function(ev) {
 
         if (!tool.started) {
             tool.started = true;
@@ -282,12 +298,12 @@ tools.text = function () {
             updateCanvas();
         }
     };
-    this.mousemove = function (ev) {
+    this.mousemove = function(ev) {
         if (!tool.started) {
             return;
         }
     };
-    this.mouseup = function (ev) {
+    this.mouseup = function(ev) {
         if (tool.started) {
             tool.mousemove(ev);
             tool.started = false;
@@ -295,20 +311,20 @@ tools.text = function () {
         }
     };
 }
-tools.erase = function () {
+tools.erase = function() {
     var tool = this;
     this.started = false;
     var drawObject = new DrawObject();
     drawObject.Tool = DrawTool.Erase;
 
-    this.mousedown = function (ev) {  //TODO: review with param -> (ev)
+    this.mousedown = function(ev) { //TODO: review with param -> (ev)
         tool.started = true;
         drawObject.currentState = DrawState.Started;
         drawObject.StartX = ev._x;
         drawObject.StartY = ev._y;
         DrawIt(drawObject, true);
     };
-    this.mousemove = function (ev) {
+    this.mousemove = function(ev) {
         if (!tool.started) {
             return;
         }
@@ -317,7 +333,7 @@ tools.erase = function () {
         drawObject.CurrentY = ev._y;
         DrawIt(drawObject, true);
     };
-    this.mouseup = function (ev) {
+    this.mouseup = function(ev) {
         drawObject.currentState = DrawState.Completed;
         drawObject.CurrentX = ev._x;
         drawObject.CurrentY = ev._y;
@@ -326,8 +342,9 @@ tools.erase = function () {
     }
 }
 
-function DrawObject() {     //TODO: review
+function DrawObject() { //TODO: review
 }
+
 function DrawIt(drawObject, syncServer) {
 
     if (drawObject.Tool == DrawTool.Line) {
@@ -345,8 +362,7 @@ function DrawIt(drawObject, syncServer) {
                 }
                 break;
         }
-    }
-    else if (drawObject.Tool == DrawTool.Pencil) {
+    } else if (drawObject.Tool == DrawTool.Pencil) {
         switch (drawObject.currentState) {
             case DrawState.Started:
                 context.beginPath();
@@ -361,8 +377,7 @@ function DrawIt(drawObject, syncServer) {
                 }
                 break;
         }
-    }
-    else if (drawObject.Tool == DrawTool.Text) {
+    } else if (drawObject.Tool == DrawTool.Text) {
         switch (drawObject.currentState) {
             case DrawState.Started:
                 context.clearRect(0, 0, canvas.width, canvas.height);
@@ -372,7 +387,7 @@ function DrawIt(drawObject, syncServer) {
                 context.fillStyle = "blue";
                 context.textAlign = "left";
                 context.textBaseline = "bottom";
-                context.fillText(drawObject.Text, drawObject.StartX, drawObject.StartY);
+                context.fillText(drawObject.Text, drawObject.StartX, drawObject.StartY + 8);
                 context.restore();
                 updateCanvas();
                 break;
@@ -380,8 +395,7 @@ function DrawIt(drawObject, syncServer) {
         }
 
 
-    }
-    else if (drawObject.Tool == DrawTool.Erase) {
+    } else if (drawObject.Tool == DrawTool.Erase) {
         switch (drawObject.currentState) {
 
             case DrawState.Started:
@@ -400,15 +414,14 @@ function DrawIt(drawObject, syncServer) {
         }
 
 
-    }
-    else if (drawObject.Tool == DrawTool.Rectangle) {
+    } else if (drawObject.Tool == DrawTool.Rectangle) {
         switch (drawObject.currentState) {
             case DrawState.Inprogress:
             case DrawState.Completed:
                 var x = Math.min(drawObject.CurrentX, drawObject.StartX),
-                        y = Math.min(drawObject.CurrentY, drawObject.StartY),
-                        w = Math.abs(drawObject.CurrentX - drawObject.StartX),
-                        h = Math.abs(drawObject.CurrentY - drawObject.StartY);
+                    y = Math.min(drawObject.CurrentY, drawObject.StartY),
+                    w = Math.abs(drawObject.CurrentX - drawObject.StartX),
+                    h = Math.abs(drawObject.CurrentY - drawObject.StartY);
 
                 context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -438,6 +451,7 @@ function updateCanvas() {
     mainContext.drawImage(canvas, 0, 0);
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
+
 function clearContext(c) {
     c.clearRect(0, 0, 0, 0); //TODO: review WIDTH, HEIGHT);
 }

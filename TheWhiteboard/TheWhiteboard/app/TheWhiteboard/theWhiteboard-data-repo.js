@@ -1,9 +1,10 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('theWhiteboardModule').factory('theWhiteboardDataRepo', ['$rootScope', 'bootstrappedData', theWhiteboardDataRepo]);
+    //angular.module('theWhiteboardModule').factory('theWhiteboardDataRepo', ['$rootScope', 'bootstrappedData', theWhiteboardDataRepo]);
+    angular.module('app.theWhiteboard').factory('theWhiteboardDataRepo', ['$rootScope', theWhiteboardDataRepo]);
 
-    function theWhiteboardDataRepo($rootScope, bootstrappedData) {
+    function theWhiteboardDataRepo($rootScope) {
         function initialize() {
 
             $.connection.hub.logging = true;
@@ -29,7 +30,8 @@
 
 
             function join() {
-                console.log(bootstrappedData.vm.userName + " " + bootstrappedData.vm.manager + " joined");
+                //console.log(bootstrappedData.vm.userName + " " + bootstrappedData.vm.manager + " joined");
+                console.log('signalR connection was started' + 'no bootrapped data');
             }
 
         };

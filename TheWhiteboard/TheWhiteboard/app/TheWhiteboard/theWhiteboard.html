@@ -1,0 +1,70 @@
+﻿<div class="row">
+    <!--<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="indexController">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="btn btn-success navbar-toggle" data-ng-click="navbarExpanded = !navbarExpanded">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </button>
+                    <a class="navbar-brand" href="#/">Home</a>
+                </div>
+                <div class="collapse navbar-collapse" data-collapse="!navbarExpanded">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li data-ng-hide="!authentication.isAuth"><a href="#">Welcome {{authentication.userName}}</a></li>
+                        @*
+                        <li data-ng-hide="!authentication.isAuth"><a href="#/orders">My Orders</a></li>*@
+                        <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Logout</a></li>
+                        <li data-ng-hide="authentication.isAuth"> <a href="#/login">Login</a></li>
+                        <li data-ng-hide="authentication.isAuth"> <a href="#/signup">Sign Up</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>-->
+    <div class="row">
+        <!--<span class="col-md-12">
+                @Model.Manager -  {{ WIDTH }} {{ drawObject }}
+            </span>-->
+        
+        {{WIDTH}} - {{message}}
+        <hr/>
+
+        <!--Refactor from table-->
+        <div class="col-md-12">
+            <!--Div for canvas/icons-->
+            <div class="col-md-6">
+                <span>
+                    <input type="image" src="/Images/line.png" class="btn btn-default"
+                           onclick="SelectTool('line'); return false;" />
+                    <input type="image" src="/Images/pen.png" class="btn btn-default"
+                           onclick="SelectTool('pencil'); return false;" />
+                    <input type="image" src="/Images/square.png" class="btn btn-default"
+                           onclick="SelectTool('rectangle'); return false;" />
+                    <input type="image" src="/Images/circle.png" class="btn btn-default"
+                           onclick="SelectTool('circle'); return false;" />
+                    <input type="image" src="/Images/text.png" class="btn btn-default"
+                           onclick="SelectTool('text'); return false;" />
+                    <input type="image" src="/Images/eraser.png" class="btn btn-default"
+                           onclick="SelectTool('erase'); return false;" />
+                    <input type="image" src="/Images/save.png" class="btn btn-default"
+                           onclick="SaveDrawings(); return false;" />
+                </span>
+                
+                <div id="container" style="border:1px gray solid; width: 900px; height: 650px"></div>   
+            </div>
+
+            <!--Unordered list with joined students-->
+            <div class="col-md-offset-4 col-md-2">
+                <ul class="col-md-12 list-group">
+                    <li class="list-group-item list-group-item-info">Users</li>
+                    <!--<li data-ng-repeat="user in $parent.users" class="list-group-item">{{user}}</li>-->
+                    <li data-ng-repeat="user in users" class="list-group-item">{{user}}</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--<div load-script></div>-->
+
+<!--<script src="~/app/TheWhiteboard/theWhiteboardMain.js"></script>-->
+

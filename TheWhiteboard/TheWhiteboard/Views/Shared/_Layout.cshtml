@@ -3,34 +3,43 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>The Whiteboard</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
 
+    @Scripts.Render("~/bundles/signalr")
+    <script src="signalr/hubs"></script>
 
+    @Scripts.Render("~/bundles/app")
 </head>
-<body>
+
+<body ng-app="app" ng-controller="layoutController">
+    <toaster-container toaster-options="{'time-out': 5000}"></toaster-container>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("TheWhiteboard", "TheWhiteboard", "TheWhiteboard", null, new { @class = "navbar-brand" })
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
+                <a href="/#/TheWhiteboard" class="navbar-brand">Connect</a>
+                @*@Html.ActionLink("TheWhiteboard", "TheWhiteboard", "TheWhiteboard", null, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="login-text" ng-if="isAuth()">
+                        Welcome, <span class="logged-user">{{loggedInUserName}}</span>
+                    </li>
+                    <li ng-if="isAuth()">
+                        <a href="" class="navbar-brand" ng-click="logout()">Logout</a>
+                    </li>
+                    <li ng-if="!isAuth()">
+                        <a href="/#/TheWhiteboard" class="navbar-brand">Login</a>
+                    </li>
                 </ul>
-                
-                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
+
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -40,8 +49,29 @@
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
+    @*<script src="~/Scripts/angular.js"></script>
+        <script src="~/Scripts/angular-route.js"></script>
+
+        <script src="~/Scripts/kinetic-v5.1.0.min.js"></script>
+        @Scripts.Render("~/bundles/signalr")
+        <script src="~/signalr/hubs"></script>
+        <script src="~/app/TheWhiteboard/theWhiteboardMain.js"></script>
+
+        <script src="~/app/Authentication/interceptor-service.js"></script>
+
+        <script src="~/app/TheWhiteboard/theWhiteboard-module.js"></script>
+        <script src="~/app/TheWhiteboard/theWhiteboard-controller.js"></script>
+        <script src="~/app/TheWhiteboard/theWhiteboard-data-repo.js"></script>
+
+        <script src="~/app/Authentication/auth-service.js"></script>
+        <script src="~/Scripts/angular-local-storage.js"></script>
+        <script src="~/app/Authentication/login-controller.js"></script>
+
+        <script src="~/app/Authentication/layout-controller.js"></script>*@
 
     @RenderSection("scripts", required: false)
+
+    <div login-dialog ng-show="!isLoginPage"></div>         @*login directive*@
 </body>
 </html>
 
