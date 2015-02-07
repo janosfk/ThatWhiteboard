@@ -17,22 +17,26 @@
                 //$scope.registerPressed = false;
 
                 $scope.login = function () {
-                    if (!$scope.newUserRegistration) {          //login
-                        $scope.loginPressed = true;
+                    // Todo Elod: this is due to faulty form submission NEEDS TO BE REMEDIATED!!!!!
+                    if ($scope.newUserRegistration)
+                        return;
 
-                        authService.login($scope.loginData)
-                            .then(function (response) {
-                                toaster.pop('success', 'Login information', 'Login success');
-                                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    $scope.loginPressed = true;
+
+                    authService.login($scope.loginData)
+                        .then(function (response) {
+                            toaster.pop('success', 'Login information', 'Login success');
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                            $scope.loginPressed = false;
+                            loadPainter();
+                        },
+                            function (err) {
+                                toaster.pop('error', 'Login information', err.error_description);
+                                //$scope.message = err.error_description;
                                 $scope.loginPressed = false;
-                                loadPainter();
-                            },
-                                function (err) {
-                                    toaster.pop('error', 'Login information', err.error_description);
-                                    //$scope.message = err.error_description;
-                                    $scope.loginPressed = false;
-                                });
-                    } else {        //register new user
+                        });
+/*
+                    else {        //register new user
                         if ($scope.loginData.username === "" && $scope.loginData.password === "") {
                             toaster.pop('warning', 'Register info', 'Please fill out the form.');
                         } else if($scope.loginData.password !== $scope.repassword) {
@@ -47,6 +51,7 @@
                                 });
                         }
                     }
+*/
                 };
 
                 $scope.newUser = function () {
