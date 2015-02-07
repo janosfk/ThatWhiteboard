@@ -4,15 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TheWhiteboardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'C:\GITHUB\THATWHITEBOARD\THEWHITEBOARD\THEWHITEBOARD\APP_DATA\THEWHITEBOARD.MDF.dbo.User' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+    <Schema Namespace="TheWhiteboardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Username" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="IsAdmin" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Username" Type="nchar" MaxLength="50" Nullable="false" />
@@ -20,35 +15,24 @@ warning 6002: The table/view 'C:\GITHUB\THATWHITEBOARD\THEWHITEBOARD\THEWHITEBOA
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
         <EntityContainer Name="TheWhiteboardModelStoreContainer">
-          <EntitySet Name="User" EntityType="Self.User" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [User].[Id] AS [Id], 
-    [User].[Username] AS [Username], 
-    [User].[Password] AS [Password], 
-    [User].[IsAdmin] AS [IsAdmin]
-    FROM [dbo].[User] AS [User]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TheWhiteboardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TheWhiteboardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="TheWhiteboardModel.User" />
+        </EntityContainer>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="Username" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="IsAdmin" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="TheWhiteboardEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Users" EntityType="Self.User" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -58,10 +42,10 @@ warning 6002: The table/view 'C:\GITHUB\THATWHITEBOARD\THEWHITEBOARD\THEWHITEBOA
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="TheWhiteboardModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
