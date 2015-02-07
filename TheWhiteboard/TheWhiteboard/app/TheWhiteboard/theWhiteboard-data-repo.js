@@ -18,7 +18,8 @@
             };
 
             $.connection.whiteBoard.client.handleDraw = function (drawObject) {
-                $rootScope.$emit('handleDraw', drawObject);
+                window.handleDraw(drawObject);
+                //$rootScope.$emit('handleDraw', drawObject);
             };
 
             $.connection.whiteBoard.client.sendUserList = function (users) {

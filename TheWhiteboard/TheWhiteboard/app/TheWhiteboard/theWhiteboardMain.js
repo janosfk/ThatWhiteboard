@@ -88,7 +88,10 @@ function loadPainter() {
 function JoinHub() {
 
     theWhiteboardHub = $.connection.whiteBoard;
-    theWhiteboardHub.client.handleDraw = function(message) {
+    
+
+    window.handleDraw = function (message) {
+
 
         var drawObjectCollection = jQuery.parseJSON(message)
         for (var i = 0; i < drawObjectCollection.length; i++) {
