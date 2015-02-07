@@ -32,13 +32,17 @@
         function logout(useRedirect) {
             localStorageService.remove('authorizationData');
 
+            var loggedOutUserName = authentication.username;
             authentication.isAuth = false;
             authentication.username = "";
             authentication.token = "";
 
             if (useRedirect) {
                 $window.location = '/#/Goodbye';
-            }
+            };
+            var hub = $.connection.whiteBoard;
+            hub.server.removeUser(loggedOutUserName);
+
         }
 
         function register(data) {

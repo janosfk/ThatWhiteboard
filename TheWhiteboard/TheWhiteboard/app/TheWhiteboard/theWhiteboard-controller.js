@@ -23,32 +23,36 @@
             $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
         }
 
+
         $scope.$on(AUTH_EVENTS.loginSuccess, function() {
             onLoad();
+
+            // Add authenticated user to users collectio
+            // broadcast through HUB
+            var user = authService.authentication.username,
+                hub = $.connection.whiteBoard;
+            hub.server.addUser(user);
+            
         });
         //#endregion auth
 
         function onLoad() {
-            //$scope.authenticated = false;
 
             //function echo(message) {
             //    $scope.message = message;
             //};
-            //function handleDraw(drawObject) {
-            //    $scope.drawObject = drawObject;
-            //};
 
             function userListChanged(users) {
                 angular.copy(users, $scope.users);
-                //$scope.apply();
             };
 
             //$scope.$parent.$on("sendUserList", function (e, users) {
-            $scope.$on("sendUserList", function (e, users) {
+            $rootScope.$on("sendUserList", function (e, users) {
                 $scope.$apply(function () {
                     userListChanged(users);
                 });
             });
+
 
             theWhiteboardDataRepo.initialize();
         }

@@ -13,31 +13,46 @@ namespace TheWhiteboard.SignalR
     public class WhiteboardHub : Hub
     {
 
-        private readonly static ConcurrentDictionary<string, int> _users;
+        private readonly static ConcurrentDictionary<string, string> _users;
+
         private static int _u = 0; 
 
         static WhiteboardHub()
         {
-            _users = new ConcurrentDictionary<string, int>();
+            _users = new ConcurrentDictionary<string, string>();
         }
 
         public override Task OnConnected()
         {
-            string name = this.Context.User.Identity.Name + _u++;
-            _users.AddOrUpdate(name, 0, (k, v) => v);
-            Clients.All.SendUserList(_users.Keys);
+            Clients.All.SendUserList(_users.Values);
             return base.OnConnected();
-            
+
         }
 
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            int result;
-            _users.TryRemove(this.Context.User.Identity.Name, out result);
-            Clients.AllExcept(new string[] { this.Context.ConnectionId }).SendUserList(_users.Keys);
+            string result;
+            _users.TryRemove(this.Context.ConnectionId, out result);
+            Clients.AllExcept(this.Context.ConnectionId).SendUserList(_users.Values);
             return base.OnDisconnected(stopCalled);
         }
+
+
+        public void AddUser(string user)
+        {
+            _users.AddOrUpdate(this.Context.ConnectionId, user, (k, v) => v);
+            Clients.All.SendUserList(_users.Values);
+
+        }
+
+        public void RemoveUser(string user)
+        {
+            string result;
+            _users.TryRemove(this.Context.ConnectionId, out result);
+            Clients.All.SendUserList(_users.Values);
+        }
+
 
         public void Echo(string message)
         {
@@ -46,7 +61,7 @@ namespace TheWhiteboard.SignalR
 
         public void SendDraw(string drawObject)
         {
-            Clients.AllExcept(new string[] { this.Context.ConnectionId }).HandleDraw(drawObject);
+            Clients.AllExcept(this.Context.ConnectionId).HandleDraw(drawObject);
         }
     }
 }
