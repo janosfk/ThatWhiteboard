@@ -218,6 +218,8 @@
       <DependentUpon>TheWhiteboardDbModel.edmx</DependentUpon>
       <LastGenOutput>TheWhiteboardDbModel.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\gigi123.pubxml" />
+    <None Include="Properties\PublishProfiles\thewhiteboard.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Images\eraser.png" />
     <Content Include="Images\save.png" />

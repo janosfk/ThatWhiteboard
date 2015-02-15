@@ -35,6 +35,10 @@ namespace TheWhiteboard
                 "~/Content/site.css",
                 "~/Content/toaster.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular-animate.min.js.map").Include(
+                //3rd party
+                "~/Scripts/angular-animate.min.js.map" ));
+
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                 //3rd party
                 "~/Scripts/kinetic-v5.1.0.min.js",
